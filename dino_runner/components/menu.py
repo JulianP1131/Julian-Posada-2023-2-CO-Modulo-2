@@ -30,8 +30,17 @@ class Menu:
                 game.playing = False
             elif event.type == pygame.KEYDOWN:
                 game.run()
-
     def update_message(self, message):
         self.text = self.font.render(message, True, (0, 0, 0))
         self.text_rect = self.text.get_rect()
         self.text_rect.center = (self.half_screen_width, self.half_screen_height)
+
+    def deaths_message(self, message):
+        self.text = self.font.render(message, True, (0, 0, 0))
+        self.text_rect = self.text.get_rect()
+        self.text_rect.center = (self.half_screen_width, self.half_screen_height + 70)
+    
+    def max_score_message(self, message):
+        self.text = self.font.render(message, True, (0, 0, 0))
+        self.text_rect = self.text.get_rect()
+        self.text_rect.center = (self.half_screen_width, self.half_screen_height + 110)

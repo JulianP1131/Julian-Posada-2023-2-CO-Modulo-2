@@ -3,14 +3,14 @@ import pygame
 from dino_runner.components.obstacles.obstacle_manager import ObstacleMannager
 from dino_runner.utils.constants import BG, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS, FONT_STYLE
 from dino_runner.components.dinosaur import Dinosour
-from dino_runner.components.obstacles.menu import Menu
+from dino_runner.components.menu import Menu
 
 class Game:
     GAME_SPEED = 20
     def __init__(self):
         pygame.init()
         pygame.display.set_caption(TITLE)
-        pygame.display.set_icon(ICON)
+        pygame.display.set_icon(ICON[0])
         self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
         self.clock = pygame.time.Clock()
         self.playing = False
@@ -23,6 +23,7 @@ class Game:
         self.running = False
         self.score = 0
         self.death_count = 0
+        self.max_score = 0
 
     def run(self):
         # Game loop: events - update - draw
@@ -77,22 +78,33 @@ class Game:
         self.menu.reset_screen_color(self.screen)
         half_screen_width = SCREEN_WIDTH // 2
         half_screen_height = SCREEN_HEIGHT // 2
-        self.screen.blit(ICON, (half_screen_width - 50, half_screen_height - 140))
+        self.screen.blit(ICON[0], (half_screen_width - 50, half_screen_height - 140))
         if self.death_count == 0:
             self.menu.draw(self.screen)
         else:
+            self.screen.blit(ICON[1], (half_screen_width - 50, half_screen_height - 140))
             self.menu.update_message("Dino has died :(")
+            self.menu.draw(self.screen)
+            self.menu.deaths_message(f'Dino Deaths: {self.death_count}')
+            self.menu.draw(self.screen)
+            self.menu.max_score_message(f'Max Score: {self.max_score}')
             self.menu.draw(self.screen)
         self.menu.update(self)
 
     def update_score(self):
         self.score += 1
+        if self.max_score < self.score:
+            self.max_score = self.score
+            self.max_score += 1
+        else:
+            self.max_score = self.max_score
+
         if self.score % 100 == 0 and self.game_speed <= 400:
             self.game_speed += 2
         
     def draw_score(self):
         font = pygame.font.Font(FONT_STYLE, 30)
-        text = font.render(f'Score: {self.score}', True , (0, 0, 0))
+        text = font.render(f'Max Score= {self.max_score} Score: {self.score}', True , (0, 0, 0))
         text_rect = text.get_rect()
-        text_rect.center = (1000, 50)
+        text_rect.center = (900, 50)
         self.screen.blit(text, text_rect)
