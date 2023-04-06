@@ -1,12 +1,12 @@
 import pygame
 
-from dino_runner.utils.constants import BG, FONT_STYLE, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS
-from dino_runner.utils.constants import DEFAULT_TYPE
+from dino_runner.utils.constants import BG, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS, DEFAULT_TYPE
 from dino_runner.components.counter import Counter
 from dino_runner.components.menu import Menu
 from dino_runner.components.obstacles.obstacle_manager import ObstacleMannager
 from dino_runner.components.power_ups.power_up_mannager import PowerUpMannager
 from dino_runner.components.dinosaur import Dinosour
+
 
 
 class Game:
@@ -100,8 +100,15 @@ class Game:
 
     def update_score(self):
         self.score.update()
-        if self.score.count % 100 == 0 and self.game_speed < 100:
+        if self.score.count % 100 == 0 and self.game_speed < 40:
             self.game_speed += 2
+
+        if self.score.count == 1500:
+            self.game_speed = 45
+        elif self.score == 3000:
+            self.game_speed = 50
+        elif self.score.count == 5000:
+            self.game_speed = 55
 
     def update_highest_score(self):
         if self.score.count > self.highest_score.count:
@@ -118,7 +125,7 @@ class Game:
         if self.player.has_power_up:
             time_to_show = round((self.player.power_up_time - pygame.time.get_ticks()) / 1000, 2)
             if time_to_show >= 0:
-                self.menu.draw(self.screen, f'{self.player.type.capitalize()} enabled for {time_to_show} seconds', 500, 50)
+                self.menu.power_up_message(self.screen, f'{self.player.type.capitalize()} enabled for {time_to_show} seconds', 500, 50)
             else:
                 self.player.has_power_up = False
                 self.player.type = DEFAULT_TYPE

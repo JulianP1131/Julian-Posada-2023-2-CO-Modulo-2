@@ -1,11 +1,10 @@
 import random
-import pygame
 
+from dino_runner.utils.constants import SHIELD_TYPE, HAMMER_TYPE, DEFAULT_TYPE
 from dino_runner.utils.constants import BIRD
-from dino_runner.components import obstacles
 from dino_runner.components.obstacles.bird import Bird
 from dino_runner.components.obstacles.cactus import Cactus
-from dino_runner.utils.constants import SHIELD_TYPE
+
 
 
 
@@ -21,8 +20,10 @@ class ObstacleMannager:
     for obstacle in self.obstacles:
       obstacle.update(game.game_speed, self.obstacles)
       if game.player.dino_rect.colliderect(obstacle.rect):
-        if game.player.type != SHIELD_TYPE:
+        if game.player.type == HAMMER_TYPE or game.player.type == DEFAULT_TYPE:
           game.playing = False
+          game.player.has_power_up = False
+          game.player.type = DEFAULT_TYPE
           game.death_count.update()
           break
         else:

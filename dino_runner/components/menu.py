@@ -39,6 +39,18 @@ class Menu:
         self.text_rect.center = (x, y)
         screen.blit(self.text, self.text_rect)
 
+    def power_up_message(self, screen, message, x=half_screen_width, y=half_screen_height):
+        self.text = self.font.render(message, True, (241, 241, 0))
+        self.text_rect = self.text.get_rect()
+        self.text_rect.center = (x, y)
+        screen.blit(self.text, self.text_rect)
+    
+    def power_up_message_2(self, screen, message, x=half_screen_width, y=half_screen_height):
+        self.text = self.font.render(message, True, (255, 0, 0))
+        self.text_rect = self.text.get_rect()
+        self.text_rect.center = (x, y)
+        screen.blit(self.text, self.text_rect)
+
     def reset_screen_color(self, screen):
         screen.fill((255, 255, 255))
 
