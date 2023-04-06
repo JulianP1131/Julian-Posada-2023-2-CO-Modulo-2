@@ -8,6 +8,7 @@ from dino_runner.components.power_ups.hammer import Hammer
 class PowerUpMannager:
     def __init__(self):
         self.power_ups = []
+
         self.duration = random.randint(3, 5)
         self.when_appears = random.randint(50, 70)
         self.counter = random.randint(0,1)

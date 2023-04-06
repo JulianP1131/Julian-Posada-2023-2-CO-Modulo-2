@@ -1,11 +1,12 @@
 import pygame
 
-from dino_runner.utils.constants import BG, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS, DEFAULT_TYPE
+from dino_runner.utils.constants import BG, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS, DEFAULT_TYPE, HAMMER, HAMMER_FLY_TYPE
 from dino_runner.components.counter import Counter
 from dino_runner.components.menu import Menu
 from dino_runner.components.obstacles.obstacle_manager import ObstacleMannager
 from dino_runner.components.power_ups.power_up_mannager import PowerUpMannager
 from dino_runner.components.dinosaur import Dinosour
+from dino_runner.components.power_ups.hammer_throw import HammerThrow
 
 
 
@@ -28,6 +29,7 @@ class Game:
         self.score = Counter()
         self.death_count = Counter()
         self.highest_score = Counter()
+        self.hammer_throw = HammerThrow()
         self.power_up_mannager = PowerUpMannager()
 
     def run(self):
@@ -59,6 +61,7 @@ class Game:
         self.player.update(user_input)
         self.obstacle_manager.update(self)
         self.update_score()
+        self.hammer_throw.update(self.update_score, self.power_up)
         self.power_up_mannager.update(self)
 
     def draw(self):
@@ -70,6 +73,7 @@ class Game:
         self.score.draw(self.screen)
         self.power_up_mannager.draw(self.screen)
         self.power_up()
+        self.hammer_throw.draw(self.screen)
         pygame.display.update()
         pygame.display.flip()
 
@@ -92,10 +96,11 @@ class Game:
         else:
             self.update_highest_score()
             self.screen.blit(ICON[1], (half_screen_width - 50, half_screen_height - 140))
-            self.menu.draw(self.screen, 'Game Over')
+            self.screen.blit(ICON[2], (half_screen_width - 200, half_screen_height - 20))
             self.menu.score_message(self.screen, f'Score: {self.score.count}', half_screen_width, 350)
             self.menu.deth_message(self.screen, f'Deaths: {self.death_count.count}', half_screen_width, 400)
             self.menu.high_score_message(self.screen, f'Highest Score: {self.highest_score.count}', half_screen_width, 500)
+            self.menu.score_message(self.screen, f'Press any key to start...', half_screen_width, 100)
         self.menu.update(self)
 
     def update_score(self):

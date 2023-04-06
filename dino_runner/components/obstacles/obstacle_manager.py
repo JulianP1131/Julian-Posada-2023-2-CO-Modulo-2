@@ -20,13 +20,14 @@ class ObstacleMannager:
     for obstacle in self.obstacles:
       obstacle.update(game.game_speed, self.obstacles)
       if game.player.dino_rect.colliderect(obstacle.rect):
-        if game.player.type == HAMMER_TYPE or game.player.type == DEFAULT_TYPE:
+        if game.player.type == DEFAULT_TYPE:
           game.playing = False
           game.player.has_power_up = False
           game.player.type = DEFAULT_TYPE
           game.death_count.update()
           break
         else:
+          game.score.count += 50
           self.obstacles.remove(obstacle)
 
   def draw(self, screen):
